@@ -57,11 +57,11 @@ async function run() {
         //     });
         //     res.send({
         //         clientSecret: paymentIntent.client_secret
-        //       });
+        //       });  
         // })
 
 
-        //checkin the admin  added here
+        //checkin the admin  added 
 
         app.get('/admin/:email', async (req, res) => {
             const email = req.params.email;
