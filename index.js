@@ -61,7 +61,7 @@ async function run() {
         // })
 
 
-        //checkin the admin 
+        //checkin the admin  added here
 
         app.get('/admin/:email', async (req, res) => {
             const email = req.params.email;
