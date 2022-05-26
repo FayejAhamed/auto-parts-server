@@ -108,7 +108,7 @@ async function run() {
 
 
 
-        // puting user info 
+        // puting user info in db
 
         app.put('/user/:email', async (req, res) => {
             const email = req.params.email;
@@ -116,7 +116,7 @@ async function run() {
             const filter = user ;
             const options = { upsert: true };
             const updateDoc = {
-                $set: user,
+                $set: user, 
             };
             const result = await userCollection.updateOne(filter, updateDoc, options);
             const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
@@ -168,6 +168,13 @@ async function run() {
             const user = req.body;
             const result = await reviewCollection.insertOne(user);
             res.send(result);
+        })
+        //get reviews for home page in ui
+        app.get('/review', async (req, res) => {
+            const query = {};
+            const cursor = reviewCollection.find(query);
+            const services = await cursor.toArray();
+            res.send(services);
         })
 
 
