@@ -91,6 +91,14 @@ async function run() {
             res.send(services);
         })
 
+        //get all orders for manage all orders commponent
+        app.get('/orders', async (req, res) => {
+            const query = {};
+            const cursor = orderCollection.find(query);
+            const services = await cursor.toArray();
+            res.send(services);
+        })
+
         app.get('/purchase/:id', verifyJWT, async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
