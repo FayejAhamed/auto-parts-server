@@ -98,11 +98,26 @@ async function run() {
             res.send(purchase);
         });
 
+           // Delete the order by id
+           app.delete('/purchase/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            const result = await partsCollection.deleteOne(query)
+            res.send(result);
+        })
 
         // post the user order
         app.post('/order', async (req, res) => {
             const order = req.body;
             const result = await orderCollection.insertOne(order);
+            res.send(result);
+        })
+     
+    
+        //adding new data in in database
+        app.post('/add', async (req, res) => {
+            const order = req.body;
+            const result = await partsCollection.insertOne(order);
             res.send(result);
         })
 
