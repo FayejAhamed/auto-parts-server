@@ -124,7 +124,7 @@ async function run() {
                 res.send(result);
             })
 
-            //add reviews
+            //add reviews in database
             app.post('/review', async (req, res) => {
                 const user = req.body;
                 const result = await reviewCollection.insertOne(user);
