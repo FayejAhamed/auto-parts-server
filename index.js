@@ -39,8 +39,9 @@ async function run() {
     try {
         await client.connect();
         const partsCollection = client.db('auto_parts').collection('services');
-        const userCollection = client.db('auto_parts').collection('users')
+        const userCollection = client.db('auto_parts').collection('users');
         const orderCollection = client.db('auto_parts').collection('order');
+        const reviewCollection = client.db('auto_parts').collection('review');
 
         //purchase data api
         app.get('/purchase', async (req, res) => {
@@ -99,7 +100,7 @@ async function run() {
 
         
         // getting the user profile data
-        app.get('/userProfile/:email', async (req, res) => {
+        app.get('/userProfile/:email',verifyJWT, async (req, res) => {
             const email = req.params.email;
             console.log(email);
             const filter = { email: email };
@@ -123,8 +124,16 @@ async function run() {
                 res.send(result);
             })
 
+            //add reviews
+            app.post('/review', async (req, res) => {
+                const user = req.body;
+                const result = await reviewCollection.insertOne(user);
+                res.send(result);
+            })
+
+
     }
-    finally {``
+    finally {
 
     }
 }
