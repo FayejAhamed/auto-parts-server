@@ -3,7 +3,7 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-
+// const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 
 const app = express();
@@ -42,6 +42,24 @@ async function run() {
         const userCollection = client.db('auto_parts').collection('users');
         const orderCollection = client.db('auto_parts').collection('order');
         const reviewCollection = client.db('auto_parts').collection('review');
+
+
+        //payment collection created
+        // app.post('/create-payment-intent',verifyJWT, async (req, res) => {
+        //     const service = req.body;
+        //     const price = service.price;
+        //     const amount = price * 100;
+        //     console.log(amount);
+        //     const paymentIntent = await stripe.paymentIntents.create({
+        //         amount: amount,
+        //         currency: 'usd',
+        //         payment_method_types: ['card']
+        //     });
+        //     res.send({
+        //         clientSecret: paymentIntent.client_secret
+        //       });
+        // })
+
 
         //checkin the admin 
 
@@ -91,20 +109,20 @@ async function run() {
             res.send(services);
         })
 
-        //get all orders for manage all orders commponent
-        app.get('/orders', async (req, res) => {
-            const query = {};
-            const cursor = orderCollection.find(query);
-            const services = await cursor.toArray();
-            res.send(services);
-        })
-
         app.get('/purchase/:id', verifyJWT, async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const purchase = await partsCollection.findOne(query);
             res.send(purchase);
         });
+
+        // payment 
+        // app.get('/payment/:id', async (req, res) => {
+        //     const id = req.params.id;
+        //     const query = { _id: ObjectId(id) };
+        //     const result = await orderCollection.findOne(query);
+        //     res.send(result);
+        // });
 
            // Delete the order by id
            app.delete('/purchase/:id', async (req, res) => {
@@ -199,6 +217,22 @@ async function run() {
             const services = await cursor.toArray();
             res.send(services);
         })
+
+
+               // patching  the data to the prders
+            //    app.patch('/orderPay/:id', verifyJWT, async (req, res) => {
+            //     const id = req.params.id;
+            //     const payment = req.body;
+            //     const filter = { _id: ObjectId(id) };
+            //     const updatedDoc = {
+            //         $set: {
+            //             paid: 'paid',
+            //             transactionId: payment.transactionId
+            //         }
+            //     }
+            //     const updatedOrder = await orderCollection.updateOne(filter, updatedDoc);
+            //     res.send(updatedOrder);
+            // })
 
 
     }
